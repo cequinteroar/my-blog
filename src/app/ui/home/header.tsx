@@ -1,13 +1,20 @@
-import { greatvibes } from "../../ui/fonts";
+"use client";
+import React from "react";
+import { greatvibes } from "@/app/ui/fonts";
 import Link from "next/link";
+import LoginFlyout from "./LogInFlyout";
 
 export default function Header() {
+  const [openLogInFlyout, setOpenLogInFlyout] = React.useState<boolean>(false);
   const headerButtonsClassNames =
     "w-14 cursor-pointer flex justify-center align-center items-center hover:bg-neutral-800 active:bg-neutral-800";
   const verticalDivider = <div className="w-px my-2 h-10 bg-blue-400 dark:bg-gray-300"></div>;
+  const openLogIn = () => {
+    setOpenLogInFlyout(!openLogInFlyout);
+  };
 
   return (
-    <div className="w-screen min-w-full h-14 flex flex-row bg-white text-black dark:bg-black dark:text-white">
+    <div className="w-screen min-w-full h-14 flex flex-row bg-white text-black dark:bg-zinc-900 dark:text-white">
       <Link href="/" className={headerButtonsClassNames}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +39,7 @@ export default function Header() {
         Cesar's Front-end Desk
       </div>
       {verticalDivider}
-      <div className={headerButtonsClassNames}>
+      <div className={headerButtonsClassNames} onClick={openLogIn}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -44,6 +51,7 @@ export default function Header() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </div>
+      {openLogInFlyout && <LoginFlyout />}
     </div>
   );
 }
