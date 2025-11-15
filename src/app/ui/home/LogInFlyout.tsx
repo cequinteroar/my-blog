@@ -4,6 +4,7 @@ import { Button } from "@/app/ui/button";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import clsx from "clsx";
+import { authenticate } from "@/app/actions/auth";
 
 interface LoginPageProps {
   redirectTo?: string;
@@ -13,10 +14,10 @@ interface LoginPageProps {
 export default function LoginFlyout({ redirectTo = "/dashboard", classNames = undefined }: LoginPageProps) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  // const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
+  const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
   const formClassNames = clsx("top-15 right-0 absolute", classNames);
   return (
-    <form action={() => {}} className={formClassNames}>
+    <form action={formAction} className={formClassNames}>
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-4 dark:bg-zinc-900 dark:text-white">
         <div className="w-full">
           <div>
@@ -26,9 +27,9 @@ export default function LoginFlyout({ redirectTo = "/dashboard", classNames = un
             <div className="relative">
               <input
                 className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm border-1 placeholder:text-gray-100"
-                id="email"
-                type="email"
-                name="email"
+                id="username"
+                type="string"
+                name="username"
                 placeholder="Enter your user name"
                 required
               />
@@ -52,7 +53,7 @@ export default function LoginFlyout({ redirectTo = "/dashboard", classNames = un
           </div>
         </div>
         <input type="hidden" name="redirectTo" value={callbackUrl} />
-        <Button className="mt-4 w-full border-1 border-color-white">
+        <Button className="mt-4 w-1/2 border-1 border-color-white justify-self-center">
           Log in
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +67,7 @@ export default function LoginFlyout({ redirectTo = "/dashboard", classNames = un
           </svg>
         </Button>
         <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
-          {/* {errorMessage && (
+          {errorMessage && (
             <>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,9 +84,9 @@ export default function LoginFlyout({ redirectTo = "/dashboard", classNames = un
                 />
               </svg>
 
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="text-sm text-red-500">{errorMessage.message}</p>
             </>
-          )} */}
+          )}
         </div>
       </div>
     </form>
